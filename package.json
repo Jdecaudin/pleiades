@@ -1,0 +1,36 @@
+{
+  "name": "pleiades",
+  "version": "0.0.1",
+  "description": "Restful routing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "amqp": "~0.2.0",
+    "amqplib": "~0.2.1",
+    "async": "~0.9.0",
+    "body-parser": "~1.6.5",
+    "express-validator": "~2.3.0",
+    "mysql": "~2.4.3",
+    "orm": "~2.1.19",
+    "request": "~2.40.0",
+    "request-json": "~0.4.11",
+    "underscore": "1.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jdecaudin/pleiades.git"
+  },
+  "keywords": [
+    "express",
+    "restful",
+    "api"
+  ],
+  "author": "Julien Decaudin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jdecaudin/pleiades/issues"
+  },
+  "homepage": "https://github.com/Jdecaudin/pleiades"
+}
