@@ -31,7 +31,7 @@ module.exports = function(app, settings, callbackPleiades) {
       services.configure(app, objects, function(app) {
         // run services
         services.run(function() {
-          require('../includes/pubsub.js').init(app);
+          require('./bin/pubsub.js').init(app);
 
           callbackPleiades();
         });

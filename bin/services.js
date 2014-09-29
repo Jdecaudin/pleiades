@@ -2,10 +2,10 @@ var _                = require('underscore'),
     async            = require('async'),
     defaultMethods   = {
       //@TODO auto load methods
-      POST:       require('./bin/defaultMethods/post.js'),
-      GET:        require('./bin/defaultMethods/get.js'),
-      PUT:        require('./bin/defaultMethods/put.js'),
-      DELETE:     require('./bin/defaultMethods/delete.js'),
+      POST:       require('./defaultMethods/post.js'),
+      GET:        require('./defaultMethods/get.js'),
+      PUT:        require('./defaultMethods/put.js'),
+      DELETE:     require('./defaultMethods/delete.js'),
     };
 
 var services = {
