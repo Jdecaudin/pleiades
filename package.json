@@ -27,10 +27,18 @@
     "restful",
     "api"
   ],
-  "author": "Julien Decaudin",
+  "author": {
+    "name": "Julien Decaudin"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Jdecaudin/pleiades/issues"
   },
-  "homepage": "https://github.com/Jdecaudin/pleiades"
+  "homepage": "https://github.com/Jdecaudin/pleiades",
+  "readme": "pleiades\n========\n",
+  "readmeFilename": "README.md",
+  "gitHead": "bf99d22b4c30297e3f9a6e8124a93d4e7affd7b7",
+  "_id": "pleiades@0.0.1",
+  "_shasum": "8cadb1b1957dbbad74fb21a7db6dca8f199d8575",
+  "_from": "pleiades@"
 }
