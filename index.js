@@ -31,7 +31,51 @@ module.exports = function(app, settings, callbackPleiades) {
       services.configure(app, objects, function(app) {
         // run services
         services.run(function() {
-          require('./bin/pubsub.js').init(app);
+          // require('./bin/pubsub.js').init(app);
+
+          // Set exposed objects router
+          if(settings.hasOwnProperty('exposeObjects')
+          && settings.exposeObjects.hasOwnProperty('active')
+          && settings.exposeObjects.active === true) {
+            if(settings.exposeObjects.hasOwnProperty('path')
+            && typeof(settings.exposeObjects.path) == "string") {
+              app.get(settings.exposeObjects.path, function(req, res) {
+                res.send(app.pleiades.objects);
+              });
+            }
+            else {
+              console.log('Error : No exposed objects path defined.');
+            }
+          }
+
+            // Set importable objects router
+            if(settings.hasOwnProperty('importableObjects')
+            && settings.importableObjects.hasOwnProperty('active')
+            && settings.importableObjects.active === true) {
+              if(settings.importableObjects.hasOwnProperty('path')
+              && typeof(settings.importableObjects.path) == "string") {
+                app.post(settings.importableObjects.path, function(req, res) {
+                  if(typeof(req.body) != 'undefined') {
+                    var data    = req.body;
+                    var name    = data.name;
+                    var content = "module.exports = ";
+                        content += JSON.stringify(data);
+                        content +=";";
+
+                    fs.writeFile(settings.objectsFolder + "/" + name + '.js', content, function(err) {
+                      if(err) {
+                          console.log(err);
+                      } else {
+                          console.log("The file was saved!");
+                      }
+                    });
+                  }
+                });
+              }
+              else {
+                console.log('Error : No exposed objects path defined.');
+              }
+            }
 
           callbackPleiades();
         });
