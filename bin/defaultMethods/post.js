@@ -19,7 +19,7 @@ post = {
 
       var channelName = method.objectName + ':post';
 
-      service.app.pubsub.publish(channelName, data);
+      // service.app.pubsub.publish(channelName, data);
 
       req.models[method.objectName].create([data], function(err, results) {
         if(err) {
