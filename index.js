@@ -34,10 +34,9 @@ module.exports = function(app, settings, callbackPleiades) {
           // require('./bin/pubsub.js').init(app);
 
           // Set exposed objects router
-          if(settings.hasOwnProperty('exposeObjects')
-          && settings.exposeObjects.hasOwnProperty('active')
+          if(isset(settings, 'exposeObjects.active')
           && settings.exposeObjects.active === true) {
-            if(settings.exposeObjects.hasOwnProperty('path')
+            if(isset(settings, 'exposeObjects.path')
             && typeof(settings.exposeObjects.path) == "string") {
               app.get(settings.exposeObjects.path, function(req, res) {
                 res.send(app.pleiades.objects);
@@ -49,16 +48,15 @@ module.exports = function(app, settings, callbackPleiades) {
           }
 
             // Set importable objects router
-            if(settings.hasOwnProperty('importableObjects')
-            && settings.importableObjects.hasOwnProperty('active')
+            if(isset(settings, 'importableObjects.active')
             && settings.importableObjects.active === true) {
-              if(settings.importableObjects.hasOwnProperty('path')
+              if(isset(settings, 'importableObjects.path')
               && typeof(settings.importableObjects.path) == "string") {
                 app.post(settings.importableObjects.path, function(req, res) {
                   if(typeof(req.body) != 'undefined') {
-                    var data    = req.body;
-                    var name    = data.name;
-                    var content = "module.exports = ";
+                    var data     = req.body;
+                    var name     = data.name;
+                    var content  = "module.exports = ";
                         content += JSON.stringify(data);
                         content +=";";
 
@@ -84,5 +82,27 @@ module.exports = function(app, settings, callbackPleiades) {
   }
   else {
     console.log('Error : No objects folder defined.');
+  }
+}
+
+function isset(object, property) {
+  var property = property.split('.');
+
+  if(property.length <1) {
+    return false;
+  }
+  else if(property.length == 1) {
+    return (object.hasOwnProperty(property[0]) || property[0] in object)
+  }
+  else {
+    if(object.hasOwnProperty(property[0])) {
+      var nested = object[property[0]];
+      property.shift();
+
+      return isset(nested, property.join('.'));
+    }
+    else {
+      return false;
+    }
   }
 }
