@@ -87,8 +87,7 @@ var services = {
       defaultMethods[method.name](_self, method);
     }
     // Call overrided method
-    // else if(_.has(method, 'process')) {
-    else if(_.has(method, 'function')) {
+    else if(_.has(method, 'process')) {
       method.process(_self);
     }
     // No method found

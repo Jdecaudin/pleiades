@@ -20,13 +20,24 @@ var app      = require('express')(),
 var settings = {
   orm: "mysql://user:password@localhost/database",
   objectsFolder: __dirname + '/objects',
-  exposeObjects: {
-    active: true,
-    path: '/objects/all',
-  },
-  importableObjects: {
-    active: true,
-    path: '/objects/import',
+  plugins: {
+    exposeObjects: {
+      enable: true,
+      path: '/objects/all',
+    },
+    importableObjects: {
+      enable: true,
+      path: '/objects/import',
+    },
+    pubsub: {
+      enable: true,
+      setting: {
+        driver: 'rmq',
+        connect: "amqp://127.0.0.1",
+        exchange : "myExchange",
+        queue    : "myQueue",
+      }
+    }
   }
 };
 
