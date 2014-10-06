@@ -2,7 +2,7 @@ var fs    = require('fs'),
     utils = require('../utils.js');
 
 var importableObjects = {
-  run: function(app) {
+  run: function(app, callback) {
     this.app     = app;
     var settings = app.pleiades.settings.plugins.importableObjects;
 
@@ -25,9 +25,12 @@ var importableObjects = {
           });
         }
       });
+
+      callback();
     }
     else {
       console.log('Error : No import objects path defined.');
+      callback();
     }
   }
 

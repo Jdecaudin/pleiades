@@ -5,7 +5,7 @@ var request      = require("request"),
 var eventEmitter  = require('events').EventEmitter;
     pubsub        = new eventEmitter();
 
-pubsub.run = function(app) {
+pubsub.run = function(app, callback) {
   this.settings = app.pleiades.settings.plugins.pubsub.setting;
   this.app      = app;
   app.pubsub    = this;
@@ -16,12 +16,18 @@ pubsub.run = function(app) {
     // Consumer
     self.connect(function(ch, q, ok) {
       self.setConsumer(ch, q);
-    });
 
-    // Publisher
-    self.connect(function(ch, q, ok) {
-      self.setPublisher(ch, q, ok);
+      // Publisher
+      self.connect(function(ch, q, ok) {
+        self.setPublisher(ch, q, ok);
+
+        callback();
+      });
     });
+  }
+  else {
+    console.log("No pubsub driver found.");
+    callback();
   }
 }
 

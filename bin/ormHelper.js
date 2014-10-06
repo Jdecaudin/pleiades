@@ -3,9 +3,23 @@ var orm     = require('orm'),
 
 var ormHelper = {
   define: function(app, db, models, next) {
-    var objects = app.pleiades.objects;
+    this.app = app;
+    app.pleiades.orm = {};
 
-    app.orm = models;
+    var objects = app.pleiades.objects;
+    var self    = this;
+
+    var Sync = require("sql-ddl-sync").Sync({
+      dialect : "mysql",
+      driver  : db.driver,
+      // debug   : function (text) {
+      //     console.log("> %s", text);
+      // }
+    });
+
+    app.pleiades.orm.models = models;
+    app.pleiades.orm.Sync   = Sync;
+
     // For each object
     async.eachSeries(
       objects,
@@ -33,6 +47,10 @@ var ormHelper = {
                 models,
                 object,
                 callback
+                // function() {
+                //   self.syncModels(function() {
+                //     callback();
+                //   })
               );
             },
             function(err) {
@@ -51,6 +69,10 @@ var ormHelper = {
     );
   },
 
+  syncModels: function() {
+
+  },
+
   createBaseFields: function(db, models, object, callback) {
     var self = this;
 
@@ -67,20 +89,35 @@ var ormHelper = {
         }
       );
       models[object.name].sync();
+
+      self.app.pleiades.orm.Sync.defineCollection(
+        object.name,
+        object.model.fields
+      );
     }
 
     callback();
   },
 
   createRelFields: function(models, object, callback) {
-    if(object.hasOwnProperty('model') && object.model.hasOwnProperty('hasMany')) {
+    if(object.hasOwnProperty('model')
+    && object.model.hasOwnProperty('hasMany')) {
       // For each relations
       async.eachSeries(
         object.model.hasMany,
         // Create relation
         function(field, callback3) {
-          if(field.hasOwnProperty('fieldName') && field.hasOwnProperty('targetObject')) {
-            models[object.name].hasMany(field.fieldName, models[field.targetObject], {}, {reverse: object.plural, autoFetch: true});
+          if(field.hasOwnProperty('fieldName')
+          && field.hasOwnProperty('targetObject')) {
+            models[object.name].hasMany(
+              field.fieldName,
+              models[field.targetObject],
+              {},
+              {
+                reverse: object.plural,
+                autoFetch: true
+              }
+            );
           }
           callback3();
         },
@@ -162,8 +199,12 @@ var ormHelper = {
       if(parameters['fields'].hasOwnProperty(fieldName)
       && parameters['fields'][fieldName].hasOwnProperty('compare')
       && comparisons.hasOwnProperty(parameters['fields'][fieldName].compare.operation)) {
-        if(typeof(parameters['fields'][fieldName].compare.value) == 'string' || typeof(parameters['fields'][fieldName].compare.value) == 'number') {
-          parameters['fields'][fieldName] = orm[comparisons[parameters['fields'][fieldName].compare.operation]](parameters['fields'][fieldName].compare.value);
+        if(typeof(parameters['fields'][fieldName].compare.value) == 'string'
+        || typeof(parameters['fields'][fieldName].compare.value) == 'number') {
+          parameters['fields'][fieldName] =
+            orm[comparisons[parameters['fields'][fieldName].compare.operation]](
+              parameters['fields'][fieldName].compare.value
+            );
         }
         else {
           parameters['fields'][fieldName] =

@@ -6,7 +6,7 @@ var pluginsHelper = {
     this.runPlugins(__dirname + '/plugins', callback);
   },
 
-  runPlugins: function(pluginsPath, /*settings,*/ callbackPlugins) {
+  runPlugins: function(pluginsPath, callbackPlugins) {
     var self = this;
 
     utils.autoLoad(
@@ -17,12 +17,14 @@ var pluginsHelper = {
         filename.pop();
         filename = filename.join('.');
         if(self.isEnable(filename)) {
-          require(path + '/' + file).run(self.app);
-
-          console.log("Plugin " + filename + " run successfully");
+          require(path + '/' + file).run(self.app, function() {
+            console.log("Plugin " + filename + " run successfully");
+            callback();
+          });
         }
-
-        callback();
+        else {
+          callback();
+        }
       },
       callbackPlugins
     );

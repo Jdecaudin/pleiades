@@ -1,6 +1,7 @@
 var bodyParser       = require('body-parser'),
     expressValidator = require('express-validator'),
     async            = require('async'),
+    _                = require('underscore'),
     orm              = require('orm'),
     ormHelper        = require('./bin/ormHelper.js'),
     fs               = require('fs'),
@@ -18,7 +19,7 @@ module.exports = function(app, settings, callbackPleiades) {
     // Get objects
     objectsHelper.getObjects(settings.objectsFolder, objects, function() {
       app.pleiades = {
-        objects: objects,
+        objects: _.indexBy(objects, 'name'),
         settings: settings,
       };
       // Use ORM to run services
