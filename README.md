@@ -20,25 +20,6 @@ var app      = require('express')(),
 var settings = {
   orm: "mysql://user:password@localhost/database",
   objectsFolder: __dirname + '/objects',
-  plugins: {
-    exposeObjects: {
-      enable: true,
-      path: '/objects/all',
-    },
-    importableObjects: {
-      enable: true,
-      path: '/objects/import',
-    },
-    pubsub: {
-      enable: true,
-      setting: {
-        driver: 'rmq',
-        connect: "amqp://127.0.0.1",
-        exchange : "myExchange",
-        queue    : "myQueue",
-      }
-    }
-  }
 };
 
 
@@ -51,100 +32,8 @@ pleiades(app, settings, function() {
 
 You have just to replace :
 * your orm settings (based on [orm module](https://www.npmjs.org/package/orm))
-* (optional) your objects directory
-* (optional) your express listen port
+* the path to your objects directory
 
-Objects
--------
+Write some objects to expose in your webservice (get some exemples in /exemples).
 
-Each object file is a part of your model. An object is described by a JSON file :
-
-* name : (string) the name of your object
-* plural : (string) the plural format of your object's name
-* model : (object)
-> * fields : (objects) the list of your fields (excluding [one/many]ToMany fields) according to [orm module](https://www.npmjs.org/package/orm)
-> * hasMany : (array) a list of [one/many]ToMany fields described by an object containing :
-> > * fieldName : (string) the name of the field in this model
-> > * targetObject : (string) the name of the targeted object
-* methods : (array) array of (js) objects containing different ways to handle your data. Each one can have :
-> * name : (sting)
-
-
-Exemple of objects
-------------------
-
-/objects/tag.json :
-
-```javascript
-{
-  name: 'tag',
-  plural: 'tags',
-  model: {
-    fields: {
-      id          : { type : "serial", key: true },
-      title       : { type: "text" },
-      description : { type: "text" }
-    },
-  },
-  methods : [
-    {name : 'GET'},
-    {name : 'POST'},
-    {name : 'PUT'},
-    {name : 'DELETE'}
-  ]
-}
-
-```
-
-/objects/news.json :
-
-```javascript
-{
-  name: 'news',
-  plural: 'news',
-  model: {
-    fields: {
-      id    : { type : "serial", key: true },
-      title : { type: "text" },
-      date  : { type: "number" },
-      body  : { type: "text" }
-    },
-    hasMany: [
-      {
-        fieldName :'tags',
-        targetObject: 'tag'
-      },
-    ],
-  },
-  methods : [
-    {name : 'GET'},
-    {name : 'POST'},
-    {name : 'PUT'},
-    {name : 'DELETE'}
-  ]
-}
-
-```
-
-/objects/page.json :
-
-```javascript
-{
-  name: 'page',
-  plural: 'pages',
-  model: {
-    fields: {
-      id    : { type : "serial", key: true },
-      title : { type: "text" },
-      body  : { type: "text" }
-    }
-  },
-  methods : [
-    {name : 'GET'},
-    {name : 'POST'},
-    {name : 'PUT'},
-    {name : 'DELETE'}
-  ]
-}
-
-```
+That's all !
