@@ -22,7 +22,6 @@ var settings = {
   objectsFolder: __dirname + '/objects',
 };
 
-
 pleiades(app, settings, function() {
   // All objects are loaded, start serveur
   app.listen(8000);

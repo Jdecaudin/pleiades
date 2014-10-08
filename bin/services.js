@@ -2,29 +2,26 @@ var _                = require('underscore'),
     async            = require('async'),
     defaultMethods   = {
       //@TODO auto load methods
-      POST:       require('./defaultMethods/post.js'),
-      GET:        require('./defaultMethods/get.js'),
-      PUT:        require('./defaultMethods/put.js'),
-      DELETE:     require('./defaultMethods/delete.js'),
+      POST:   require('./defaultMethods/post.js'),
+      GET:    require('./defaultMethods/get.js'),
+      PUT:    require('./defaultMethods/put.js'),
+      DELETE: require('./defaultMethods/delete.js'),
     };
 
 var services = {
-  app         : {},
-  express     : {},
-  objects     : {},
-  connection  : {},
+  app     : {},
+  objects : {},
 
   /**
    * Constructor for services object
    * @param  {object}   express     express instance
    * @param  {object}   app         server instance
    * @param  {object}   objects     list of service to implement, with callbacks
-   * @param  {object}   connection  MySQL instance
    * @param  {Function} callback    action to perform after configuration
    */
   configure : function(app, objects, callback) {
-    this.app         = app;
-    this.objects     = objects;
+    this.app     = app;
+    this.objects = objects;
 
     // ajoute le nom de l'objet dans les méthode qui le compose (utile pour la suite)
     _.each(this.objects, function(object, objectIndex, objectList) {
@@ -85,7 +82,7 @@ var services = {
     var _self = services;
 
     // Call default method
-    if(!_.has(method, 'function') && _.has(defaultMethods, method.name)) {
+    if(!_.has(method, 'process') && _.has(defaultMethods, method.name)) {
       defaultMethods[method.name](_self, method);
     }
     // Call overrided method

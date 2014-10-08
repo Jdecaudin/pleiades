@@ -1,10 +1,7 @@
 var bodyParser       = require('body-parser'),
     expressValidator = require('express-validator'),
-    async            = require('async'),
-    _                = require('underscore'),
     orm              = require('orm'),
     ormHelper        = require('./bin/ormHelper.js'),
-    fs               = require('fs'),
     services         = require('./bin/services.js')
     objects          = [],
     objectsHelper    = require('./bin/objectsHelper.js'),
@@ -35,7 +32,6 @@ module.exports = function(app, settings, callbackPleiades) {
     // Get objects
     objectsHelper.getObjects(settings.objectsFolder, objects, function() {
       app.pleiades = {
-        // keyedObjects: _.indexBy(objects, 'name'),
         objects: objects,
         settings: settings,
       };

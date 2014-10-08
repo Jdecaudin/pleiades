@@ -18,7 +18,6 @@ put = {
     var message = 'Update /' +  method.objectName;
     console.log(message.prompt);
 
-
     var parameters = ormHelper.getParametersFromHeaders(req);
 
     req.models[method.objectName].find(
