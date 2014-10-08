@@ -4,7 +4,9 @@ var utils     = require('../utils.js'),
 
 var exposeObjects = {
   run: function(app, callback) {
-    this.app     = app;
+    var self     = this;
+    self.app     = app;
+    self.objects = _.indexBy(app.pleiades.objects, 'name');
     var settings = app.pleiades.settings.plugins.exposeObjects;
 
     if(utils.isset(settings, 'path')
@@ -13,8 +15,8 @@ var exposeObjects = {
         // if(utils.isset(req, 'headers.'))
         var params  = ormHelper.getParametersFromHeaders(req);
         if(utils.isset(params, 'fields.name')) {
-          if(utils.isset(app.pleiades.objects, params.fields.name)) {
-            var returns = app.pleiades.objects[params.fields.name];
+          if(utils.isset(self.objects, params.fields.name)) {
+            var returns = self.objects[params.fields.name];
           }
           else {
             res.status(404);

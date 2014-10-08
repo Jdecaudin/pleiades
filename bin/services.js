@@ -55,7 +55,7 @@ var services = {
   run : function (callback) {
     async.eachSeries(this.objects, this.addService, function(err) {
       if(err != undefined) {
-        console.log('Error, can\'t run webservices', err);
+        console.log('Error, can\'t run webservices'.error, err);
       }
       else {
         callback();
@@ -67,12 +67,14 @@ var services = {
   addService : function(object, callback) {
     var _self = services;
 
-    async.eachSeries(object.methods, _self.runMethod, function(err){
+    async.eachSeries(object.methods, _self.runMethod, function(err) {
       if(err != undefined) {
-        console.log('Une erreur est survenue lors du lancement du service ' + object.name, err);
+        var message = 'Une erreur est survenue lors du lancement du service ' + object.name;
+        console.log(message.error, err);
       }
       else {
-        console.log('Service ' + object.name + ' run successfully');
+        var message = 'Service ' + object.name + ' run successfully';
+        console.log(message.success);
         callback();
       }
     });
@@ -92,7 +94,8 @@ var services = {
     }
     // No method found
     else {
-      console.log('Error : ' + method.objectName + ' have a methode named ' + method.name + ' but no function to run it.');
+      var message = 'Error : ' + method.objectName + ' have a methode named ' + method.name + ' but no function to run it.';
+      console.log(message.error);
     }
 
     callback();

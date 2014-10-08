@@ -26,7 +26,7 @@ pubsub.run = function(app, callback) {
     });
   }
   else {
-    console.log("No pubsub driver found.");
+    console.log("No pubsub driver found.".warn);
     callback();
   }
 }
@@ -51,7 +51,7 @@ pubsub.connect = function(callback) {
 pubsub.setConsumer = function(ch, q, ok) {
   var self = this;
 
-  console.log("PubSub consumer ready.");
+  console.log("PubSub consumer ready.".success);
 
   ch.consume(q, function(msg) {
     if (msg !== null) {
@@ -69,7 +69,7 @@ pubsub.setPublisher = function(ch, q, ok) {
 
   ch.assertExchange(self.settings.exchange, 'topic', {durable: true});
   ok.then(function() {
-    console.log("PubSub publisher ready.");
+    console.log("PubSub publisher ready.".success);
 
     // Add new method to publish messages
     self.publish = function(channel, message) {

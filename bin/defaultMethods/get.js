@@ -17,7 +17,8 @@ get = {
   },
 
   process : function (service, method, req, res, callback) {
-    console.log('Access /' +  method.objectName);
+    var message = 'Access /' +  method.objectName;
+    console.log(message.prompt);
 
     var parameters = ormHelper.getParametersFromHeaders(req);
 

@@ -18,7 +18,8 @@ var pluginsHelper = {
         filename = filename.join('.');
         if(self.isEnable(filename)) {
           require(path + '/' + file).run(self.app, function() {
-            console.log("Plugin " + filename + " run successfully");
+            var message = "Plugin " + filename + " run successfully";
+            console.log(message.success);
             callback();
           });
         }

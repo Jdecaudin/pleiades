@@ -10,6 +10,22 @@ var bodyParser       = require('body-parser'),
     objectsHelper    = require('./bin/objectsHelper.js'),
     pluginsHelper    = require('./bin/pluginsHelper.js');
 
+var colors = require('colors');
+
+colors.setTheme({
+  silly: 'rainbow',
+  input: 'grey',
+  verbose: 'cyan',
+  prompt: 'grey',
+  info: 'green',
+  success: 'green',
+  data: 'grey',
+  help: 'cyan',
+  warn: 'yellow',
+  debug: 'blue',
+  error: 'red'
+});
+
 module.exports = function(app, settings, callbackPleiades) {
   app.use(bodyParser.json());
   app.use(expressValidator());
@@ -19,7 +35,8 @@ module.exports = function(app, settings, callbackPleiades) {
     // Get objects
     objectsHelper.getObjects(settings.objectsFolder, objects, function() {
       app.pleiades = {
-        objects: _.indexBy(objects, 'name'),
+        // keyedObjects: _.indexBy(objects, 'name'),
+        objects: objects,
         settings: settings,
       };
       // Use ORM to run services
@@ -43,6 +60,6 @@ module.exports = function(app, settings, callbackPleiades) {
     });
   }
   else {
-    console.log('Error : No objects folder defined.');
+    console.log('Error : No objects folder defined.'.error);
   }
 }

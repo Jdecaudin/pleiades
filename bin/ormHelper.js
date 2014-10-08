@@ -34,7 +34,7 @@ var ormHelper = {
       },
       function(err) {
         if(err != undefined) {
-          console.log('Error, can\'t create base fields', err);
+          console.log('Error, can\'t create base fields'.error, err);
           next();
         }
         else {
@@ -55,10 +55,10 @@ var ormHelper = {
             },
             function(err) {
               if(err != undefined) {
-                console.log('Error, can\'t create relations', err);
+                console.log('Error, can\'t create relations'.error, err);
               }
               else {
-                console.log('Models created successfully');
+                console.log('Models created successfully'.success);
               }
 
               next();
@@ -123,7 +123,7 @@ var ormHelper = {
         },
         function(err) {
           if(err != undefined) {
-            console.log('Error, hasMany', err);
+            console.log('Error, hasMany'.error, err);
           }
           else {
             models[object.name].sync();

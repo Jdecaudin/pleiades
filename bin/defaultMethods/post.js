@@ -15,7 +15,9 @@ post = {
   process : function (service, method, req, res) {
     if(typeof(req.body) != 'undefined') {
       var data = req.body;
-      console.log('Create /' + method.objectName);
+
+      var message = 'Create /' +  method.objectName;
+      console.log(message.prompt);
 
       var channelName = method.objectName + ':post';
 

@@ -15,7 +15,9 @@ put = {
   },
 
   process : function (service, method, req, res) {
-    console.log('Update /' + method.objectName);
+    var message = 'Update /' +  method.objectName;
+    console.log(message.prompt);
+
 
     var parameters = ormHelper.getParametersFromHeaders(req);
 

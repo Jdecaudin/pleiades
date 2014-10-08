@@ -15,7 +15,8 @@ Delete = {
   },
 
   process : function (service, method, req, res) {
-    console.log('Delete /' + method.objectName);
+    var message = 'Delete /' +  method.objectName;
+    console.log(message.prompt);
 
     var parameters = ormHelper.getParametersFromHeaders(req);
 

@@ -7,35 +7,44 @@ var utils = {
 
     fs.readdir(path, function(err, files) {
       if(err != undefined) {
-        console.log('A - Error, can\'t auto load ' + flag + ' files', err);
+        var message = 'Error, can\'t auto load ' + flag + ' files';
+        console.log(message.error, err);
       }
       else {
-        async.each(
-          files,
-          function(file, callbackEach) {
-            fs.stat(path + '/' + file, function (errStat, stats) {
-              if (errStat) {
-                console.log(errStat);
-                return;
-              }
+        if(files.length == 0) {
+          var message = 'Warning, try to autoload empty ' + flag + ' directory (' + path + ')';
+          console.log(message.warn);
+          callbackAutoLoad();
+        }
+        else {
+          async.each(
+            files,
+            function(file, callbackEach) {
+              fs.stat(path + '/' + file, function (errStat, stats) {
+                if (errStat) {
+                  console.log('Error'.error, errStat);
+                  return;
+                }
 
-              if (stats.isFile()) {
-                callbackFileLoaded(path, file, callbackEach);
+                if (stats.isFile()) {
+                  callbackFileLoaded(path, file, callbackEach);
+                }
+                else if (stats.isDirectory()) {
+                  self.autoLoad(path + "/" + file, flag, callbackFileLoaded, callbackEach);
+                }
+              });
+            },
+            function(err) {
+              if(err != undefined) {
+                var message = 'Error, can\'t auto load ' + flag + ' files';
+                console.log(message.error, err);
               }
-              else if (stats.isDirectory()) {
-                self.autoLoad(path + "/" + file, flag, callbackFileLoaded, callbackEach);
+              else {
+                callbackAutoLoad();
               }
-            });
-          },
-          function(err) {
-            if(err != undefined) {
-              console.log('B - Error, can\'t auto load ' + flag + ' files', err);
             }
-            else {
-              callbackAutoLoad();
-            }
-          }
-        );
+          );
+        }
       }
     });
   },
