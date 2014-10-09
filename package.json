@@ -1,6 +1,6 @@
 {
   "name": "pleiades",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Restful routing",
   "main": "index.js",
   "scripts": {
