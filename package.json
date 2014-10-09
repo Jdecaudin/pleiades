@@ -1,6 +1,6 @@
 {
   "name": "pleiades",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Restful routing",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "orm": "~2.1.19",
     "request": "~2.40.0",
     "request-json": "~0.4.11",
+    "sql-ddl-sync": "~0.1.4",
     "underscore": "1.6.0"
   },
   "repository": {
