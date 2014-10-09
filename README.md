@@ -5,7 +5,7 @@ Installation
 ------------
 
 ```
-npm install express orm pleiades
+npm install express pleiades
 ```
 
 Usage

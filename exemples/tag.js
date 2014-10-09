@@ -9,8 +9,8 @@ module.exports = {
     },
   },
   methods : [
-    {name : 'GET'},
-    {name : 'POST'},
-    {name : 'PUT'},
+    {verb : 'get'},
+    {verb : 'post'},
+    {verb : 'put'},
   ]
 };

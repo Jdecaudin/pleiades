@@ -1,46 +1,24 @@
 var ormHelper = require('../ormHelper.js');
 
-get = {
-  autoLoad : function (service, method) {
-    service.app.get('/' + method.objectName, function (req, res) {
-      var callback = (method.hasOwnProperty('callback')) ? method.callback : false;
+module.exports = function (req, res, service, method, callback) {
+  var message = 'Access /' +  method.objectName;
+  console.log(message.prompt);
 
-      if(method.hasOwnProperty('preprocess')) {
-        method.preprocess(service, method, req, res, function() {
-          get.process(service, method, req, res, callback);
-        });
+  var parameters = ormHelper.getParametersFromHeaders(req);
+
+  req.models[method.objectName].find(
+    parameters['fields'],
+    parameters['options'],
+    function(err, results) {
+      if(err) {
+        res.status(500);
+        res.send(err);
       }
       else {
-        get.process(service, method, req, res, callback);
+        res.send(results);
       }
-    });
-  },
 
-  process : function (service, method, req, res, callback) {
-    var message = 'Access /' +  method.objectName;
-    console.log(message.prompt);
-
-    var parameters = ormHelper.getParametersFromHeaders(req);
-
-    req.models[method.objectName].find(
-      parameters['fields'],
-      parameters['options'],
-      function(err, results) {
-        if(err) {
-          res.status(500);
-          res.send(err);
-        }
-        else {
-          if(callback) {
-            callback(results, service, method, req, res);
-          }
-          else {
-            res.send(results);
-          }
-        }
-      }
-    );
-  }
-}
-
-module.exports = get.autoLoad;
+      callback(req, res, service, method, results);
+    }
+  );
+};

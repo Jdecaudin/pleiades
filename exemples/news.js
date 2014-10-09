@@ -17,7 +17,7 @@ module.exports = {
     ],
   },
   methods : [
-    {name : 'GET'},
-    {name : 'POST'},
+    {verb : 'get'},
+    {verb : 'post'},
   ]
 };

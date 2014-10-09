@@ -10,6 +10,6 @@ module.exports = {
     },
   },
   methods : [
-    {name : 'GET'},
+    {verb : 'get'},
   ]
 };
