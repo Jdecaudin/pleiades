@@ -14,6 +14,7 @@ Each object file is a part of your model. An object is described by a JSON file 
  * verb       : (sting) the HTTP verb to use with the handler
  * preprocess : (optional - array) Array of functions triggered right after request reception. Each preprocess function
  * process    : (optional - function) Handler function replacing the default one (each verb have a default handler in : ./bin/defaultMethods/). This function must return the Express response object to client.
+ * callback   : (optional - function) Callback function (triggered after sending response to the client)
 
 Preprocess functions
 --------------------
@@ -24,8 +25,8 @@ Each function take 3 parameters :
 * res  : (object)   response object exposed by [Express](http://expressjs.com/api.html#response)
 * next : (function) callback
 
-Process functions
---------------------
+Process function
+----------------
 
 Handler function replacing the default one (each verb have a default handler in : ./bin/defaultMethods/). This function must return the Express response object to client.
 This function take 5 parameters :
@@ -34,3 +35,15 @@ This function take 5 parameters :
 * app      : (object) "app" object exposed by [Express](http://expressjs.com/api.html#application)
 * method   : (object) current "method" object (described in your current pleiade object)
 * callback : (function) callback
+
+Callback functions
+------------------
+
+* req     : (object) "request" object exposed by [Express](http://expressjs.com/api.html#request)
+* res     : (object) "response" object exposed by [Express](http://expressjs.com/api.html#response)
+* app     : (object) "app" object exposed by [Express](http://expressjs.com/api.html#application)
+* method  : (object) current "method" object (described in your current pleiade object)
+* results : (array) Array of results returned by process function
+* next    : (function) callback
+
+For working exemple, try ./page.js
