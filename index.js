@@ -1,6 +1,7 @@
 var bodyParser       = require('body-parser'),
     expressValidator = require('express-validator'),
     orm              = require('orm'),
+    _                = require('underscore'),
     ormHelper        = require('./bin/ormHelper.js'),
     services         = require('./bin/services.js')
     objects          = [],
@@ -34,6 +35,7 @@ module.exports = function(app, settings, callbackPleiades) {
       app.pleiades = {
         objects: objects,
         settings: settings,
+        objectsByName: _.indexBy(objects, 'name'),
       };
       // Use ORM to run services
       app.use(orm.express(settings.orm, {
@@ -42,6 +44,8 @@ module.exports = function(app, settings, callbackPleiades) {
           ormHelper.define(app, db, models, next);
         }
       }));
+
+      // halHelper.init(app);
 
       // Prepare objects
       services.configure(app, objects, function(app) {

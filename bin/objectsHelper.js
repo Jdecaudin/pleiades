@@ -16,6 +16,11 @@ var objectsHelper = {
       callbackGet
     );
   },
+
+  getObjectSearchURL: function(object) {
+    // @TODO : dynamically get object root
+    return "/" + object.plural;
+  }
 };
 
 module.exports = objectsHelper;

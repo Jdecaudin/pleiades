@@ -3,6 +3,7 @@ var utils = require('./utils.js');
 var pluginsHelper = {
   init: function(app, callback) {
     this.app = app;
+    app.pleiades.plugins = {};
     this.runPlugins(__dirname + '/plugins', callback);
   },
 
@@ -17,9 +18,13 @@ var pluginsHelper = {
         filename.pop();
         filename = filename.join('.');
         if(self.isEnable(filename)) {
-          require(path + '/' + file).run(self.app, function() {
+          require(path + '/' + file).run(self.app, function(plugin) {
+            if(plugin) {
+              self.app.pleiades.plugins[filename] = plugin;
+            }
             var message = "Plugin " + filename + " run successfully";
             console.log(message.success);
+
             callback();
           });
         }

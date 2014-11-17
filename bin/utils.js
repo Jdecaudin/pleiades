@@ -49,14 +49,18 @@ var utils = {
     });
   },
 
-  isset: function(object, property) {
+  isset: function(object, property, notNull) {
+    var notNull  = notNull || true;
     var property = property.split('.');
 
     if(property.length <1) {
       return false;
     }
     else if(property.length == 1) {
-      return (object.hasOwnProperty(property[0]) || property[0] in object)
+      return (
+        (object.hasOwnProperty(property[0]) || property[0] in object)
+        && (notNull === false|| (notNull === true && typeof(property[0]) != 'undefined'))
+        )
     }
     else {
       if(object.hasOwnProperty(property[0])) {

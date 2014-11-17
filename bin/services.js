@@ -27,13 +27,14 @@ var services = {
     _.each(this.objects, function(object, objectIndex, objectList) {
       _.each(object.methods, function(method, methodIndex, methodList) {
         this.objects[objectIndex].methods[methodIndex].objectName = this.objects[objectIndex].name;
+        this.objects[objectIndex].methods[methodIndex].objectPluralName = this.objects[objectIndex].plural;
       });
     });
 
     // Express Middleware, set headers
     this.app.use(function(req, res, next) {
       res.header("Access-Control-Allow-Origin", "*");
-      res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+      res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, X-Fields, X-Options");
       // TODO : dynammicaly add methods
       res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
 
@@ -153,18 +154,45 @@ var services = {
 
   // Run specific methode
   runMethod : function(method, callback) {
-    var self = services;
+    var self   = services;
+    var prefix = method.prefix || '';
+    var suffix = method.suffix || '';
+    // var path   = prefix + '/' + method.objectPluralName + suffix;
 
-    self.app[method.verb]('/' + method.objectName, function (req, res) {
-      // Preprocess
-      self.preprocess(req, res, method, function() {
-        // Process
-        self.process(req, res, method, function(req, res, service, method, results) {
-          // Callback
-          self.callback(req, res, service, method, results);
+    var routes = [
+      {
+        path: prefix + '/' + method.objectPluralName + suffix,
+        availableVerbs: {get: true, post: true, put: true, delete: true}
+      },
+      {
+        path: prefix + '/' + method.objectPluralName + '/:id' + suffix,
+        availableVerbs: {get: true, put: true, delete: true}
+      },
+      {
+        path: prefix + '/' + method.objectPluralName + '/:id/:resource' + suffix,
+        availableVerbs: {get: true, put: true, delete: true}
+      },
+    ];
+
+    for(i in routes) {
+      if(utils.isset(routes[i].availableVerbs, method.verb)) {
+        var message = 'New route available (' + method.verb.toUpperCase() + '): ';
+        var messageRoute = routes[i].path.toString();
+
+        console.log(message.success + messageRoute.success.inverse);
+
+        self.app[method.verb](routes[i].path, function (req, res) {
+          // Preprocess
+          self.preprocess(req, res, method, function() {
+            // Process
+            self.process(req, res, method, function(req, res, service, method, results) {
+              // Callback
+              self.callback(req, res, service, method, results);
+            });
+          });
         });
-      });
-    });
+      }
+    }
 
     callback();
   },

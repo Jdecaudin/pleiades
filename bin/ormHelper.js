@@ -1,5 +1,6 @@
 var orm     = require('orm'),
-    async   = require('async');
+    async   = require('async'),
+    _       = require('underscore');
 
 var ormHelper = {
   define: function(app, db, models, next) {
@@ -69,6 +70,15 @@ var ormHelper = {
     );
   },
 
+  getObjectKey: function(object) {
+    for(fieldName in object.model.fields) {
+      if(object.model.fields[fieldName].type == 'serial')
+        return fieldName;
+    }
+
+    return null;
+  },
+
   syncModels: function() {
 
   },
@@ -115,7 +125,8 @@ var ormHelper = {
               {},
               {
                 reverse: object.plural,
-                autoFetch: true
+                // autoFetch: true
+                autoFetch: false
               }
             );
           }
@@ -133,7 +144,6 @@ var ormHelper = {
     }
     callback();
   },
-
 
   /**
    * Create a complete document (with related objects) from an object
@@ -195,28 +205,59 @@ var ormHelper = {
       'not_like'   : 'not_like',
     };
 
-    for(var fieldName in parameters['fields']) {
-      if(parameters['fields'].hasOwnProperty(fieldName)
-      && parameters['fields'][fieldName].hasOwnProperty('compare')
-      && comparisons.hasOwnProperty(parameters['fields'][fieldName].compare.operation)) {
-        if(typeof(parameters['fields'][fieldName].compare.value) == 'string'
-        || typeof(parameters['fields'][fieldName].compare.value) == 'number') {
-          parameters['fields'][fieldName] =
-            orm[comparisons[parameters['fields'][fieldName].compare.operation]](
-              parameters['fields'][fieldName].compare.value
+    for(var fieldName in parameters.fields) {
+      if(parameters.fields.hasOwnProperty(fieldName)
+      && parameters.fields[fieldName].hasOwnProperty('compare')
+      && comparisons.hasOwnProperty(parameters.fields[fieldName].compare.operation)) {
+        if(typeof(parameters.fields[fieldName].compare.value) == 'string'
+        || typeof(parameters.fields[fieldName].compare.value) == 'number') {
+          parameters.fields[fieldName] =
+            orm[comparisons[parameters.fields[fieldName].compare.operation]](
+              parameters.fields[fieldName].compare.value
             );
         }
         else {
-          parameters['fields'][fieldName] =
-            orm[comparisons[parameters['fields'][fieldName].compare.operation]](
-              parameters['fields'][fieldName].compare.value[0],
-              parameters['fields'][fieldName].compare.value[1]
+          parameters.fields[fieldName] =
+            orm[comparisons[parameters.fields[fieldName].compare.operation]](
+              parameters.fields[fieldName].compare.value[0],
+              parameters.fields[fieldName].compare.value[1]
             );
         }
       }
     }
 
     return parameters;
+  },
+
+  getParametersFromURL: function(req) {
+
+  },
+
+  decodeBlob: function(results, callback) {
+    var i = -1;
+    async.eachSeries(
+      results,
+      function(result, callbackRes) {
+        i++;
+        _.each(
+          result,
+          function(value, key, list) {
+            if(value instanceof Buffer) {
+              results[i][key] = new Buffer(results[i][key]).toString();
+            }
+          }
+        );
+
+        callbackRes();
+      },
+      function(err) {
+        if(err) {
+          console.log("Error : ".error, err);
+        }
+
+        callback();
+      }
+    );
   },
 
   ucfirst: function (str) {

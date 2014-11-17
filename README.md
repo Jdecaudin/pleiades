@@ -1,5 +1,11 @@
 pleiades
 ========
+---
+
+[![NPM Version](https://img.shields.io/npm/v/pleiades.svg?style=flat)](https://www.npmjs.org/package/pleiades)
+[![Build Status](https://img.shields.io/travis/strongloop/pleiades.svg?style=flat)](https://travis-ci.org/strongloop/pleiades)
+
+---
 
 Installation
 ------------
@@ -37,6 +43,12 @@ Write some objects to expose in your webservice (get some exemples in /exemples)
 
 That's all !
 
+Known issues
+------------
+
+* Deleting referenced objects (hasMany field) don't delete content on join table
+* You have to restart your server two times after join table creation
+
 @TODO
 -----
 
@@ -45,11 +57,16 @@ That's all !
 * Be able to choose specific fields to get
 * Documentation generation based on objects's description
 * Content generation based on objects's description
+* Implements HAL ?
 
 ... So help us ;-)
 
+---
+
 License
 =======
+
+---
 
 This software is licensed under the MIT license.
 
